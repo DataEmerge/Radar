@@ -1,0 +1,96 @@
+﻿<div *ngIf="graphValues.length > 0 && graphOptions.length == graphValues.length"
+     [ngStyle]="{
+        'width': diameter + 'px',
+        'height': diameter + 'px'
+     }"
+     class="mx-auto" id="progressGraph-{{ _id }}">
+    <div [ngStyle]="{
+            'width': radius + 'px',
+            'height': radius + 'px'
+         }"
+         class="graphs">
+
+        <div *ngFor="let graph of graphOptions; let i = index"
+             [ngStyle]="{
+                'width': getGraphSize(i) + 'px',
+                'height': getGraphSize(i) + 'px',
+                'top': getGraphOffset(i) + 'px',
+                'left': getGraphOffset(i) + 'px',
+                'z-index': i + 2
+             }"
+             class="graph">
+
+            <div [ngStyle]="{
+                    'background-color': graph.backgroundColor,
+                    'z-index': i + 3
+                 }"
+                 class="graph-background"></div>
+
+            <div [ngStyle]="{
+                    'width': getWedgeContainerSize(i) + 'px',
+                    'left': getWedgeContainerOffset(i, 'right') + 'px',
+                    'z-index': i + 4
+                 }"
+                 class="wedge-container">
+                <div [ngStyle]="{
+                        'width': getWedgeSize(i) + 'px',
+                        'left': getWedgeOffset(i, 'right') + 'px',
+                        'border-radius': getWedgeBorderRadius(i, 'right'),
+                        'background-color': graph.foregroundColor,
+                        'transform': 'rotate(' + getWedgeRotation(i, 'right') + 'deg)'
+                     }"
+                     class="wedge" style="transform-origin: 100% 50%"></div>
+            </div>
+
+            <div [ngStyle]="{
+                    'width': getWedgeContainerSize(i) + 'px',
+                    'left': getWedgeContainerOffset(i, 'left') + 'px',
+                    'z-index': i + 5
+                 }"
+                 class="wedge-container">
+                <div [ngStyle]="{
+                        'width': getWedgeSize(i) + 'px',
+                        'left': getWedgeOffset(i, 'left') + 'px',
+                        'border-radius': getWedgeBorderRadius(i, 'left'),
+                        'background-color': graph.foregroundColor,
+                        'transform': 'rotate(' + getWedgeRotation(i, 'left') + 'deg)'
+                     }"
+                     class="wedge" style="transform-origin: 0% 50%"></div>
+            </div>
+
+            <div [ngStyle]="{
+                    'width': strokeWidth + 'px',
+                    'height': strokeWidth + 'px',
+                    'background-color': graph.foregroundColor,
+                    'transform-origin': getMarkerTransformOrigin(i),
+                    'transform': 'translateX(-50%) rotateZ(' + getMarkerRotation(i, 'end') + 'deg)',
+                    'z-index': i + 6
+                 }"
+                 class="marker end"></div>
+
+            <div [ngStyle]="{
+                    'width': strokeWidth + 'px',
+                    'height': strokeWidth + 'px',
+                    'background-color': graph.foregroundColor,
+                    'transform-origin': getMarkerTransformOrigin(i),
+                    'transform': 'translateX(-50%) rotateZ(' + getMarkerRotation(i, 'start') + 'deg)',
+                    'z-index': i + 7
+                 }"
+                 class="marker start row align-items-center">
+                <span [ngStyle]="{ 'transform': 'rotateZ(' + (-1 * getMarkerRotation(i, 'start')) + 'deg)' }"
+                      class="mx-auto fa {{ graph.icon }} font-black font-lg"></span>
+            </div>
+
+            <div [ngStyle]="{
+                    'width': getOverlaySize(i) + 'px',
+                    'height': getOverlaySize(i) + 'px',
+                    'top': getOverlayOffset(i) + 'px',
+                    'left': getOverlayOffset(i) + 'px',
+                    'z-index': i + 8
+                 }"
+                 [ngClass]="{ 'gray-xxd': darkTheme, 'gray-xb': !darkTheme }"
+                 class="graph-overlay"></div>
+
+        </div>
+    </div>
+</div>

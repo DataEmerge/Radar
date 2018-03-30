@@ -1,0 +1,16 @@
+﻿<div [ngStyle]="{ 'min-height': minHeight + 'px', 'max-width': maxWidth + 'px' }"
+     class="w-100 h-100 uil-default-css align-items-center row {{ classes }}" id="loadingIndicator-{{ id }}">
+    <div *ngFor="let dot of dots; let i = index"
+         [ngStyle]="{
+            'height': dotSize + 'px',
+            'width': dotSize + 'px',
+            '-webkit-animation': 'uil-default-anim 1s linear infinite',
+            'animation': 'uil-default-anim 1s linear infinite',
+            '-webkit-animation-delay': (i / numDots) + 's',
+            'animation-delay': (i / numDots) + 's',
+            'margin-left': (max(maxWidth - (numDots * dotSize), 0) / (numDots * 2)) + 'px',
+            'margin-right': (max(maxWidth - (numDots * dotSize), 0) / (numDots * 2)) + 'px'
+         }"
+         class="blue-b inline-block"
+         style="border-radius: 50%;"></div>
+</div>

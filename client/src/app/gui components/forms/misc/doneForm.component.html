@@ -1,0 +1,23 @@
+﻿<app-modal [formName]="'DoneForm'"
+           [size]="'modal-sm'"
+           [position]="'middle'"
+           [canButtonClose]="true"
+           [canContainerClickClose]="true"
+           [canEscapeClose]="true"
+           [darkTheme]="darkTheme">
+    <div *ngIf="component != null && componentName != ''" class="app-modal-header">
+        <span class="font-xl">Success</span>
+    </div>
+
+    <div *ngIf="component != null && componentName != ''" class="app-modal-body container-fluid">
+        <span class="">Successfully {{ verb + ' ' + componentName.substring(componentName.indexOf('DB') + 2).toLowerCase() + ' "' + component.name + '" ' }}</span>
+        <span *ngIf="preposition != '' && componentParent != null">
+            {{ preposition + ' ' + component.type.toLowerCase() + ' ' }}
+            <span *ngIf="componentParent.componentType != ''">{{ componentParent.componentType }}{{ componentParent.componentType == 'database' ? '!' : (' \"' + componentParent.name + '\"') }}</span>
+        </span>
+    </div>
+
+    <div *ngIf="component != null && componentName != ''" class="app-modal-footer">
+        <button class="okButton btn btn-primary btn-xs" (click)="closeForm()">OK</button>
+    </div>
+</app-modal>

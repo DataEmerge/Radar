@@ -1,0 +1,131 @@
+﻿<app-modal [formName]="'EventLogForm'"
+           [size]="'modal-lg'"
+           [position]="'middle'"
+           [canButtonClose]="true"
+           [canContainerClickClose]="true"
+           [canEscapeClose]="true"
+           [darkTheme]="darkTheme"
+           [options]="'extendToBottom'">
+
+    <div class="app-modal-header">
+        <div class="font-xl">{{ scriptStatus ? scriptStatus._project.facility.name : 'Loading...' }}</div>
+        <div class="">
+            <span class="font-gray">{{ scriptStatus ? '#' + scriptStatus._project.referenceNum : '' }}</span>
+            <span class="">{{ scriptStatus ? scriptStatus._project.name : '' }}</span>
+            <span class="font-gray">{{ scriptStatus ? '[' + scriptStatus._project._id + ']' : '' }}</span>
+        </div>
+        <div class="mt-1">
+            <span class="underline">Event Logs</span>
+        </div>
+    </div>
+
+    <div class="app-modal-body container-fluid relative">
+
+        <div [ngClass]="{ 'formDark': darkTheme }"
+             class="row w-100 form-sm bb-1 b-gray pb-2" id="filteringOptions">
+
+            <div class="row align-items-center pr-3" id="filterByEventType">
+                <span class="mr-2">Event type:</span>
+                <div class="">
+                    <multiselect [items]="classNames"
+                                 [selectedItems]="selectedClassNames"
+                                 [darkTheme]="darkTheme"
+                                 (onChanged)="selectedClassNames = $event; onScriptEventsChange()"></multiselect>
+                </div>
+            </div>
+
+            <div class="row align-items-center pl-4" id="filterByTimestamp">
+
+                <span class="mr-2">From:</span>
+                <div class="font-xs" style="min-width: 300px">
+                    <datetime-popup *ngIf="!isReconstructingStartDatepicker"
+                                    [value]="startFilterDate"
+                                    [darkTheme]="darkTheme"
+                                    [ngClass]="{ 'darkTheme': darkTheme }"
+                                    (onValueChange)="startFilterDate = $event; onScriptEventsChange()"
+                                    (onExpanded)="onScriptEventsChange(false)"></datetime-popup>
+                </div>
+
+                <span class="ml-3 mr-2">To:</span>
+                <div class="font-xs" style="min-width: 300px">
+                    <datetime-popup *ngIf="!isReconstructingEndDatepicker"
+                                    [value]="endFilterDate"
+                                    [darkTheme]="darkTheme"
+                                    [ngClass]="{ 'darkTheme': darkTheme }"
+                                    (onValueChange)="endFilterDate = $event; onScriptEventsChange()"
+                                    (onExpanded)="onScriptEventsChange(false)"></datetime-popup>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row" id="eventHeaders">
+            <div [ngStyle]="{ 'width': mainColumnWidth + 'px' }"
+                 (click)="sortBy('timestamp')"
+                 class="inline pointer">
+                <span class="underline">Timestamp</span>
+                <span *ngIf="sortProp == 'timestamp'"
+                      [ngClass]="{ 'fa-caret-up': reverseSort, 'fa-caret-down': !reverseSort }"
+                      class="fa font-gray"></span>
+            </div>
+            <div [ngStyle]="{ 'width': mainColumnWidth + 'px' }"
+                 (click)="sortBy('className')"
+                 class="inline pointer">
+                <span class="underline">Event Type</span>
+                <span *ngIf="sortProp == 'className'"
+                      [ngClass]="{ 'fa-caret-up': reverseSort, 'fa-caret-down': !reverseSort }"
+                      class="fa font-gray"></span>
+            </div>
+            <div class="inline">Details</div>
+        </div>
+
+        <div class="" id="logsList">
+            <span class="absolute" style="top: -100000000px" id="font-size-template">W</span>
+            <div *ngFor="let scriptEvent of scriptEvents">
+                <div *ngIf="matchesFilter(scriptEvent)"
+                     class="row">
+                    <div [ngStyle]="{ 'width': mainColumnWidth + 'px' }"
+                         class="font-gray">{{ formatDate(scriptEvent.timestamp) }}</div>
+                    <div [ngStyle]="{ 'width': mainColumnWidth + 'px' }"
+                         class="{{ getClassNameFontColor(scriptEvent.className) }}">{{ scriptEvent.className }}</div>
+                    <div class="col px-0" id="detailsList-{{ scriptEvent._id }}">
+                        <div *ngFor="let detail of getObjectProps(scriptEvent)"
+                             class="mr-1 inline">
+                            <span class="font-gray">{{ detail.name }}<span class="font-white">:</span></span>
+                            <div class="inline px-0">
+                                <div *ngIf="isObject(detail.value)"
+                                     class="inline">
+                                    {{ '{' }} <span *ngFor="let subvalue of getObjectProps(detail.value, false); let x = index" [ngClass]="getDetailValueFontColor(subvalue)" class=""><span class="font-gray">{{ subvalue.name }}: </span><span [ngClass]="getDetailValueFontColor(subvalue.value)">{{ formatDetailValue(subvalue.value) }}</span><span *ngIf="x < getObjectProps(detail.value, false).length - 1" class="font-white">, </span></span> {{ '};' }}
+                                </div>
+                                <div *ngIf="isArray(detail.value)"
+                                     class="inline">
+                                    [<span class=""><span *ngFor="let subvalue of detail.value; let x = index" [ngClass]="getDetailValueFontColor(subvalue)">{{ formatDetailValue(subvalue) }}<span *ngIf="x < detail.value.length - 1" class="font-white">, </span></span></span>]<span class="font-white">;</span>
+                                </div>
+                                <div *ngIf="isPrimitive(detail.value)"
+                                     [ngClass]="getDetailValueFontColor(detail.value)"
+                                     class="inline">
+                                    {{ formatDetailValue(detail.value) }}<span class="font-white">;</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="isLoading"
+             class="row w-100 mt-5">
+            <loadingIndicator class="mx-auto"></loadingIndicator>
+        </div>
+
+    </div>
+
+    <div class="app-modal-footer">
+        <button (click)="closeForm()"
+                class="okButton btn btn-primary btn-sm">
+            Close
+        </button>
+    </div>
+
+</app-modal>

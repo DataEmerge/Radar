@@ -1,0 +1,90 @@
+﻿<div (onContainerClicked)="closeDropdown()"
+     [ngClass]="{ 'darkTheme font-white': darkTheme }"
+     class="cuppa-dropdown">
+    <div class="selected-list">
+        <div [ngClass]="{ 'disabled': settings.disabled, 'font-white gray-xd': darkTheme }"
+             (click)="toggleDropdown($event)"
+             class="c-btn" id="propsDropdown">
+            <span *ngIf="selectedItems?.length == 0">{{ settings.selectPlaceholder }}</span>
+
+            <span *ngIf="!settings.multiple">
+                <span *ngFor="let item of selectedItems">{{ item }}</span>
+            </span>
+
+            <div *ngIf="selectedItems?.length > 0 && settings.multiple"
+                 class="c-list">
+                <div *ngFor="let item of selectedItems; let i = index"
+                     [hidden]="i > settings.maxShownItems - 1"
+                     (click)="onClickItem(item, i, $event)"
+                     class="c-token">
+                    <span class="c-label">{{ item }}</span>
+                    <span class="fa fa-remove px-1"></span>
+                </div>
+            </div>
+            <span *ngIf="selectedItems?.length > settings.maxShownItems"> + {{ selectedItems?.length - settings.maxShownItems }}</span>
+            <span [ngClass]="{ 'fa-angle-down': !isActive, 'fa-angle-up': isActive }"
+                  class="fa"></span>
+        </div>
+    </div>
+
+    <div *ngIf="isActive"
+         class="dropdown-list">
+        <div [ngClass]="{ 'darkTheme': darkTheme }"
+             class="arrow-up"></div>
+        <div class="list-area">
+            <div *ngIf="settings.canSelectAll && settings.multiple"
+                 (click)="toggleSelectAll()"
+                 [ngClass]="{ 'darkTheme': darkTheme }"
+                 class="pure-checkbox select-all">
+                <input [checked]="allSelected"
+                       [disabled]="settings.maxSelectedItems == selectedItems?.length"
+                       type="checkbox" />
+                <label>{{ settings.selectAllLabelText }}</label>
+            </div>
+
+            <div *ngIf="settings.canSearch"
+                 [ngClass]="{ 'form-dark': darkTheme }"
+                 class="list-filter">
+                <span class="fa fa-search"></span>
+                <input [(ngModel)]="filterString"
+                       [placeholder]="settings.searchPlaceholder">
+            </div>
+
+            <ul *ngIf="!settings.groupBy"
+                [style.maxHeight]="settings.maxHeight + 'px'">
+                <li *ngFor="let item of filterItems(); let i = index"
+                    (click)="onClickItem(item, i, $event)"
+                    [ngClass]="{ 'darkTheme': darkTheme }"
+                    class="pure-checkbox">
+                    <input [disabled]="settings.maxSelectedItems == selectedItems?.length && !itemIsSelected(item)"
+                           [checked]="itemIsSelected(item)"
+                           type="checkbox" />
+                    <label>{{ item }}</label>
+                </li>
+            </ul>
+
+            <div *ngIf="settings.groupBy"
+                 [style.maxHeight]="settings.maxHeight + 'px'"
+                 style="overflow: auto">
+                <ul *ngFor="let itemGroup of groupedItems; let i = index"
+                    class="list-grp">
+                    <h4>{{ itemGroup.key }}</h4>
+                    <li *ngFor="let item of itemGroup.value | filterBy:filterString:'name'; let i = index;"
+                        (click)="onItemClick(item, i, $event)"
+                        [ngClass]="{ 'darkTheme': darkTheme }"
+                        class="pure-checkbox">
+                        <input [disabled]="settings.maxSelectedItems == selectedItems?.length && !itemIsSelected(item)"
+                               [checked]="isSelected(item)"
+                               type="checkbox" />
+                        <label>{{ item.itemName }}</label>
+                    </li>
+                </ul>
+            </div>
+
+            <h5 *ngIf="items?.length == 0"
+                class="list-message">
+                No Items Available :(
+            </h5>
+        </div>
+    </div>
+</div>

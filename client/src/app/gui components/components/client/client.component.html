@@ -1,0 +1,44 @@
+﻿<div [ngClass]="{ 'gray-xxd': darkTheme, 'gray-xb': !darkTheme }"
+     class="b-radius-5px py-1 b-1" id="client-{{ _id }}">
+
+    <div [ngClass]="{ 'bb-1 mb-1 pb-1': isExpanded, 'b-white': darkTheme }"
+         (click)="expand($event)"
+         class="row w-100" id="clientHeader-{{ _id }}">
+        <div class="col pointer align-items-center font-sm px-1 row">
+
+            <div class="px-1 col-auto" id="clientExpansionIndicator-{{ _id }}">
+                <span [ngClass]="{ 'fa-plus': !isExpanded, 'fa-minus': isExpanded }"
+                      class="fa font-gray-d"></span>
+            </div>
+
+            <div class="col-auto px-1" id="clientName-{{ _id }}">
+                <span class="">{{ name }} ({{ numScriptStatusesMatchingFilters }}/{{ numScriptStatuses }})</span>
+            </div>
+
+            <div class="col-auto ml-auto mr-1 px-0 relative" id="clientButtons-{{ _id }}">
+                <div [hidden]="!isExpanded"
+                     (click)="expandAllScriptStatuses()"
+                     class="" id="expandScriptStatuses-{{ _id }}">
+                    <button [ngClass]="{ 'fa-minus-square': allScriptStatusesExpanded == 1, 'fa-plus-square': allScriptStatusesExpanded == -1, 'fa-plus-square-o': allScriptStatusesExpanded == 0 }"
+                            class="btn btn-xs btn-primary fa DETooltip pointer" id="expandScriptStatusesButton-{{ _id }}"></button>
+                    <span class="DETooltiptext DETooltip-left DETooltip-sm font-xs">{{ (allScriptStatusesExpanded == -1 ? 'Expand' : 'Collapse') + ' all statuses' }}</span>
+                </div>
+            </div>
+
+        </div>
+        <!-- put context menu things from data mapping tool here (if at some point they get added) -->
+    </div>
+
+    <!--<div [hidden]="!isExpanded"-->
+    <div *ngIf="isExpanded && isPopulated"
+         class="row w-100 py-1 px-2" id="clientBody-{{ _id }}">
+        <scriptStatus *ngFor="let scriptStatus of scriptStatuses"
+                      [clientID]="_id"
+                      [darkTheme]="darkTheme"></scriptStatus>
+    </div>
+
+    <loadingIndicator *ngIf="!isPopulated"
+                      [numDots]="3"
+                      class="mx-auto mt-5"></loadingIndicator>
+
+</div>

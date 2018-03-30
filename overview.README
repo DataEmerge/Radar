@@ -1,0 +1,56 @@
+﻿DataEmerge Radar App - Overview
+Author: Andrew Gulick
+
+To run from pm2 on the live DigitalOcean server:
+    - navigate to /server/
+    - run "npm run build-all" // see the file structure section for more information about this command
+    - run "pm2 start dist/index.js --name Radar" // note: the multiple processes part of this app won't work if you don't do it like this
+
+To run and test locally:
+	- run mongod.exe // run a local Mongo instance
+	- navigate to /LOCAL_REPO_DIR/Radar/server and run "npm run build-all-start" // run the Radar server app
+	- navigate to /LOCAL_REPO_DIR/Radar/client and run "npm start" // run Angular CLI to serve the Radar client app
+	- navigate to /LOCAL_REPO_DIR/Extract/server and run "npm run build-start" // run the API server app
+	- run robo3t.exe // optionally run Robomongo to better manage test data
+
+When changing ScriptEvent properties, the following must be updated:
+	- /node_modules/Radar-shared/interfaces/events.interface.ts
+	- /node_modules/Radar-shared/classes/sharedEvents.ts
+	- definitions in the /client/ and /server/ // see the respective readme's
+    - any implementation in Radar
+    - any implementation in API
+	- the classes and implementation in the Echo monitoring script
+
+About the file structure:
+	There are three primary folders in this directory: /server/, /client/, and /node_modules/. The client and server folders are self-explanatory,
+		but the "shared node_modules" folder is a little different. It contains classes and interfaces that are used in both the client and server
+		folders, primarily utility classes and the ScriptEvent classes and interfaces. 
+		
+	It's in a folder named "node_modules" outside of the other two folders because of how Node's path resolution works. While this results in fewer
+		places to have to change things, the consequence is that the files in the shared folder have to be copied into both the server and client
+		folders before they are compiled. While this doesn't matter for the interfaces, things will crash if the classes aren't updated in both of
+		those places. This is why to build the whole app, you run "npm run build-all", which does all the copying and transpiling and compiling. See
+		the package.json and the gulpfile for more information about what all that command does.
+
+About imports:
+	As mentioned above, the imports use relative paths as specified in the tsconfig.json. In the TypeScript files, they're primarily in the following
+		order (this is just Andrew's personal preference):
+		1. any imports from node_modules (not including the shared node_modules folder), in no particular order
+		2. interfaces from the shared node_modules folder (things from ___/base.__.ts first in each category)
+		3. interfaces from the current main directory (i.e. /src/...)
+		4. classes from the shared node_modules folder
+		5. classes from the current main directory
+		6. other miscellaneous imports (see the client and server readme's for specifics applying to each at this point)
+		7. renaming/aliasing of above imports is usually last
+		8. on a side note, types used only in the current file are usually declared after the imports
+		9. on another side note, constants are usually declared after the types
+
+Consult the individual classes for further implementation details and explanations.
+
+
+
+TODO:
+	fix datepicker
+	revisit event log
+	fix scriptStatusComponent
+	test with multiple clients/projects

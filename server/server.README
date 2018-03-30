@@ -1,0 +1,29 @@
+﻿DataEmerge Radar App - Server
+Author: Andrew Gulick
+
+See the overview readme for:
+	- running directions
+	- imports semantics
+	- file structure explanation
+
+When changing ScriptEvent properties, the following must be updated:
+	- implementation in this folder // all the definitions are provided from ../node_modules/Radar-shared/ (see overview readme)
+    - definitions in the shared folder
+	- definitions and implementation in ../client // see client readme
+    - any implementation in API
+	- the classes and implementation in the Echo Monitoring script
+
+About the tsconfig.json:
+	The paths listed there (and the base url) are so that relative paths can be used in import statements.
+	When the app gets compiled, the gulpfile transpiles the import paths to absolute paths.
+	The output directory only affects where you run the actual index.js from, but probably shouldn't be inside the src file.
+	Most of the settings are compiler options for syntax/semantics preferences, but make an educated and purposeful decision before changing them.
+	The target is the JS version the app gets compiled to. It preferably should be "esnext", and we'll deal with compatibility issues as they arise.
+
+About the .ejs files in /views/:
+	These are the pages that are rendered when ../client/src/index.html isn't sent. The names there should be self-explanatory.
+	If changing the standard app headers and/or footers, or the logos or names, or if copying this project to serve as a template for another app,
+		be sure to update stuff in these files too.
+	Note: currently, only login.ejs is being used.
+
+Consult the individual classes for further implementation details and explanations.

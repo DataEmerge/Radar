@@ -1,0 +1,270 @@
+<div [ngClass]="{ 'gray-xxxd font-white': darkTheme, 'white font-black': !darkTheme }"
+     class="w-100 h-100 fill-height">
+
+    <div class="row mb-2 flex-none" id="page-header" style="box-shadow: rgba(51, 152, 75, 0.5) 0px 2px 5px 0px;">
+        <div [ngClass]="{ 'gray-xxxd font-white': darkTheme, 'white': !darkTheme }"
+             class="row w-100 py-1 font-sm">
+            <div class="w-xl w-lg w-md mx-auto">
+                <div class="row">
+
+                    <div *ngIf="hasChosenProject && !isLoading"
+                         class="mr-auto row" id="projectActions">
+
+                        <div class="col-auto" id="home">
+                            <a (click)="goHome()">
+                                <span class="fa fa-home"></span> Home
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div class="col-auto mx-auto">Welcome, {{ currentUser == null ? 'Current User' : currentUser.displayName }}</div>
+
+                    <div class="col-auto ml-auto align-items-center" id="darkThemeToggle">
+                        <span class="mr-1">{{ darkTheme ? 'Dark' : 'Light' }} Theme</span>
+                        <label class="switch" for="checkbox">
+                            <input [ngModel]="darkTheme"
+                                   (change)="darkTheme = !darkTheme"
+                                   type="checkbox" id="checkbox" />
+                            <div class="slider round blue-b"></div>
+                        </label>
+                    </div>
+
+                    <div class="col-auto" id="logOut">
+                        <a class="font-blue-b" href="/logout">
+                            <span class="fa fa-sign-out"></span> Log out
+                        </a>
+                    </div>
+
+                    <!--<div class="col-auto" id="help">
+                        <a (click)="showHelp()"
+                           (keyup)="hideHelp($event)">
+                            <span class="fa fa-question-circle"></span> Help
+                        </a>
+                    </div>-->
+
+                    <div class="col-auto" id="changelog">
+                        <a (click)="showForm('Changelog')"
+                           (keyup)="hideChangelog($event)">
+                            <span class="fa fa-code"></span> Changelog
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row w-100 green" style="height: 5px"></div>
+    </div>
+
+    <div class="row" id="page-body">
+
+        <div *ngIf="!isLoading && errorMessages.length == 0"
+             [ngClass]="{ 'b-white': darkTheme }"
+             class="pl-4 pr-3 o-auto col-2 br-1" id="sidebar">
+
+            <div class="row font-xs mb-2 mt-1" id="expandAllClientsButton">
+                <button (click)="expandAllClients()"
+                        class="btn btn-xs btn-primary">
+                    <span [ngClass]="{ 'fa-minus': allClientsExpanded == 1, 'fa-plus': allClientsExpanded != 1 }"
+                          class="fa pl-1"></span>
+                    <span class="ml-1">{{ (allClientsExpanded == 1 ? 'Collapse' : 'Expand') + ' all clients' }}</span>
+                </button>
+            </div>
+
+            <div class="row mb-1" id="filtersHeader">
+                <span class="underline col-auto px-0">Filter Statuses ({{ numScriptStatusesMatchingFilters }}/{{ numScriptStatuses }})</span>
+                <div class="relative ml-2 font-sm col-auto px-0">
+                    <button (click)="clearAllFilters()"
+                            class="btn btn-xs btn-danger fa fa-times DETooltip font-xs"></button>
+                    <span class="DETooltiptext DETooltip-left DETooltip-sm font-xs">Clear all filters</span>
+                </div>
+            </div>
+
+            <div class="font-xs mb-3" id="referenceNumFilter">
+                <span class="bold">Reference #:</span>
+                <div [ngClass]="{ 'form-dark': darkTheme }"
+                     class="input-group form-sm">
+                    <input [(ngModel)]="filters.referenceNum"
+                           (input)="onFiltersChange()"
+                           class="form-control form-control-sm" />
+                    <div class="input-group-addon">
+                        <span class="fa fa-search"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="font-xs mb-3" id="facilityFilter">
+                <span class="bold">Facility:</span>
+                <div [ngClass]="{ 'form-dark': darkTheme }"
+                     class="input-group form-sm">
+                    <input [(ngModel)]="filters.facility"
+                           (input)="onFiltersChange()"
+                           class="form-control form-control-sm" />
+                    <div class="input-group-addon">
+                        <span class="fa fa-search"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="font-xs mb-3" id="subfacilityFilter">
+                <span class="bold">Subfacility:</span>
+                <div [ngClass]="{ 'form-dark': darkTheme }"
+                     class="input-group form-sm">
+                    <input [(ngModel)]="filters.subfacility"
+                           (input)="onFiltersChange()"
+                           class="form-control form-control-sm" />
+                    <div class="input-group-addon">
+                        <span class="fa fa-search"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="font-xs mb-3" id="projectNameFilter">
+                <span class="bold">Project Name:</span>
+                <div [ngClass]="{ 'form-dark': darkTheme }"
+                     class="input-group form-sm">
+                    <input [(ngModel)]="filters.projectName"
+                           (input)="onFiltersChange()"
+                           class="form-control form-control-sm" />
+                    <div class="input-group-addon">
+                        <span class="fa fa-search"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="font-xs mb-3" id="estimatedCompletionDateFilter">
+
+                <div class="row align-items-center">
+                    <span class="bold">Estimated Completion Date:</span>
+                    <div class="inline-block relative">
+                        <span class="ml-1 fa fa-question-circle-o DETooltip"></span>
+                        <span class="DETooltiptext DETooltip-top font-xs">Filter statuses with estimated<br />completion dates before the<br />selected date</span>
+                    </div>
+                </div>
+
+                <div id="completionDate-datepicker">
+                    <datetime-popup *ngIf="!isReconstructingDatepicker"
+                                    [value]="filters.estimatedCompletionDate"
+                                    [darkTheme]="darkTheme"
+                                    [ngClass]="{ 'darkTheme': darkTheme }"
+                                    (onValueChange)="filters.estimatedCompletionDate = $event; onFiltersChange()"></datetime-popup>
+                </div>
+
+            </div>
+
+            <div [ngStyle]="{ 'margin-top': isReconstructingDatepicker ? '31px' : '0px' }"
+                 class="font-xs b-1 b-gray p-1 b-radius-5px" id="statusFilter">
+
+                <div (click)="filters.status.isExpanded = !filters.status.isExpanded"
+                     class="row w-100 align-items-center pointer" id="statusFilterHeader">
+                    <span class="mr-auto bold">Status{{ filters.status.isExpanded ? ':' : '' }}</span>
+                    <span [ngClass]="{ 'fa-minus': filters.status.isExpanded, 'fa-plus': !filters.status.isExpanded }"
+                          class="fa px-1"></span>
+                </div>
+
+                <div [hidden]="!filters.status.isExpanded"
+                     class="pl-3" id="statusFilterBody">
+
+                    <div [ngClass]="{ 'form-dark': darkTheme }"
+                         class="row form-sm align-items-center" id="checkAllStatusFiltersBox">
+                        <input [(ngModel)]="filters.status.allChecked"
+                               (change)="onStatusFiltersChange('all')"
+                               class="" type="checkbox" />
+                        <span class="pl-2">Check All</span>
+                    </div>
+
+                    <div *ngFor="let option of filters.status.options"
+                         [ngClass]="{ 'form-dark': darkTheme }"
+                         class="row form-sm align-items-center" id="statusFilter-{{ option.name }}">
+                        <input [(ngModel)]="option.checked"
+                               (change)="onStatusFiltersChange()"
+                               class="mr-2" type="checkbox" />
+                        <div class="dot dot-sm dot-{{ option.color }}"></div>
+                        <span class="pl-2">{{ option.name }}</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div *ngIf="!isLoading && errorMessages.length == 0"
+             class="pl-3 pr-4 col o-auto" id="clientsList">
+
+            <span *ngIf="clients.length == 0"
+                  class="mx-auto">No scripts running for any clients at the moment.</span>
+
+            <client *ngFor="let client of clients.sort(clientComparator); let i = index"
+                    [darkTheme]="darkTheme"
+                    id="client-{{ client._id }}"></client>
+
+        </div>
+
+        <div *ngIf="isLoading && errorMessages.length == 0"
+             class="row w-100 my-auto" id="loadingIndicator">
+            <span class="w-100 text-center mb-3">{{ appServiceIsReady ? (scriptStatusServiceIsReady ? 'Loading...' : 'Fetching statuses...') : 'Connecting to Radar server...' }}</span>
+            <loadingIndicator class="mx-auto"></loadingIndicator>
+        </div>
+
+        <div *ngIf="errorMessages.length > 0"
+             class="row px-5 mt-5 mb-auto font-red" id="errorMessages">
+            <div *ngFor="let errorMessage of errorMessages"
+                 class="row w-100">
+                <span *ngIf="isString(errorMessage)"
+                      class="w-100 mb-2">{{ errorMessage }}</span>
+                <div *ngIf="isArray(errorMessage)"
+                     class="w-100 mb-2">
+                    <span *ngFor="let subErrorMessage of errorMessage; let z = index"
+                          [ngClass]="{ 'pl-5': z > 0 }"
+                          class="row w-100 pl-5">{{ subErrorMessage}}</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="flex-none row font-xs" id="page-footer">
+        <div class="row w-100 px-3" id="footer-row">
+            <div class="my-1 mx-auto">
+                <div class="row">
+
+                    <div [ngClass]="{ 'b-white': darkTheme, 'b-black': !darkTheme }"
+                         class="col-auto br-1" id="copyright">
+                        <span class="">Copyright </span>
+                        <span class="fa fa-copyright"></span>
+                        <span class="">
+                            DataEmerge
+                            <script type="text/javascript">document.write(new Date().getFullYear());</script>
+                        </span>
+                    </div>
+
+                    <div [ngClass]="{ 'b-white': darkTheme, 'b-black': !darkTheme }"
+                         class="col-auto br-1" id="phone">
+                        <span class="fa fa-phone"></span>
+                        <span class=""> (614) 725-0404</span>
+                    </div>
+
+                    <div [ngClass]="{ 'b-white': darkTheme, 'b-black': !darkTheme }"
+                         class="col-auto br-1" id="address">
+                        <span class="fa fa-map-marker"></span>
+                        <span class=""> 1550 Old Henderson Road | Suite 234 | Columbus, Ohio 43220 | United States of America</span>
+                    </div>
+
+                    <div class="col-auto" id="email">
+                        <span class="fa fa-question-circle-o"></span>
+                        <span class=""> Need help? Email </span>
+                        <a class="font-blue-b" href="mailto:devteam@dataemerge.com">devteam@dataemerge.com</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <eventLogForm *ngIf="formsShown.EventLogForm"
+                  [darkTheme]="darkTheme"></eventLogForm>
+    <changelog *ngIf="formsShown.Changelog"
+               [darkTheme]="darkTheme"></changelog>
+
+</div>

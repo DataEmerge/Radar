@@ -1,0 +1,32 @@
+﻿<div [ngStyle]="{ 'display': isVisible ? 'block' : 'none' }"
+     tabindex="1"
+     class="modal">
+    <div (click)="hide()"
+         (keyup)="onKeyPressed($event)"
+         [ngClass]="{ 'gray-xd': darkTheme, 'black': !darkTheme }"
+         class="h-100 w-100"
+         style="z-index: 8; opacity: 0.5"></div>
+    <div (keyup)="onKeyPressed($event)"
+         class="modal-dialog {{ size }} {{ position }} {{ options }}" id="{{ formName }}-modal"
+         style="z-index: 10;">
+        <div [ngClass]="{ 'gray-xxxd font-white': darkTheme }"
+             class="modal-content {{ contentOptions }}">
+            <div class="modal-header" id="{{ formName }}-header">
+                <button ng-if="buttonClose"
+                        [ngClass]="{ 'btn-dark': darkTheme }"
+                        (click)="onCloseClicked()"
+                        class="close-modal btn btn-xs fa fa-times-circle"></button>
+                <ng-content select=".app-modal-header"></ng-content>
+            </div>
+            <div [ngStyle]="{ 'max-height': getBodyMaxHeight() + 'px' }"
+                 (window:resize)="bodyMaxHeight = getBodyMaxHeight()"
+                 class="modal-body oy-auto ox-hidden" id="{{ formName }}-body">
+                {{ value }}
+                <ng-content select=".app-modal-body"></ng-content>
+            </div>
+            <div class="modal-footer" id="{{ formName }}-footer">
+                <ng-content select=".app-modal-footer"></ng-content>
+            </div>
+        </div>
+    </div>
+</div>

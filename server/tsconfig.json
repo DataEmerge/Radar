@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": false,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "noLib": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "esnext",
+    "sourceMap": true,
+    "allowJs": true,
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "src/*": [ "./src/*" ],
+      "classes/*": [ "./src/classes/*" ],
+      "controllers/*": [ "./src/controllers/*" ],
+      "interfaces/*": [ "./src/interfaces/*" ],
+      "schemas/*": [ "./src/schemas/*" ],
+      "config/*": [ "./src/config/*" ]
+    }
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

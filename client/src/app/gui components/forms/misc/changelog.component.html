@@ -1,0 +1,222 @@
+﻿<app-modal [formName]="'Changelog'"
+           [size]="'modal-lg'"
+           [position]="'middle'"
+           [canButtonClose]="true"
+           [canContainerClickClose]="true"
+           [canEscapeClose]="true"
+           [darkTheme]="darkTheme">
+
+    <div class="app-modal-header font-xl">Changelog</div>
+
+    <div [ngClass]="{ 'darkTheme' : darkTheme }"
+         class="app-modal-body container-fluid">
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v2.3.0: Functionality</span></div>
+            <div class="w-full"><span class="">- Fixed scrolling issues with some flexbox magic.</span></div>
+            <div class="w-full"><span class="">- Started implementing script status filtering (and en masse collapsing/expanding).</span></div>
+            <div class="w-full"><span class="">- Added a collapsed view to scriptStatusComponents (tried REALLY hard to make it transition smoothly, but there wasn't a good/easy way to do it).</span></div>
+            <div class="w-full"><span class="">- Added some action labels to the loading indicators during page loading.</span></div>
+            <div class="w-full"><span class="">- Added KeepAlive event handling and timeouts to statuses (turned off temporarily while testing other things).</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v2.0.1: Functionality</span></div>
+            <div class="w-full"><span class="">- Restored login functionality.</span></div>
+            <div class="w-full"><span class="">- Restored expanding/collapsing other components.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v2.0.0: Overhaul</span></div>
+            <div class="w-full"><span class="">- Stopped storing data clientside.</span></div>
+            <div class="w-full"><span class="">- Converted server to TypeScript.</span></div>
+            <div class="w-full"><span class="">- Added a lot of logging to the server.</span></div>
+            <div class="w-full"><span class="">- Revamped the server layout.</span></div>
+            <div class="w-full"><span class="">- Redesigned the mapping project view to be more eye-friendly.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v1.0 - v1.9: A lot of things</span></div>
+            <div class="w-full"><span class="">- A bunch of stuff we didn't document, but that aren't applicable since they've all been since changed anyway.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.4.2: Tweaks</span></div>
+            <div class="w-full"><span class="">- Fixed a couple styling issues.</span></div>
+            <div class="w-full"><span class="">- Made the login page smaller.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.4.1: Functionality</span></div>
+            <div class="w-full"><span class="">- Implemented login system and put things live on the server.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.4.0: Functionality</span></div>
+            <div class="w-full"><span class="">- Implemented exporting of mapping projects to Excel files with a few options.</span></div>
+            <div class="w-full"><span class="">- Added and re-designed a smooooth multiselect plugin.</span></div>
+            <div class="w-full"><span class="">- Fixed a couple misc tiny bugs and re-added a couple small functionalities.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.3.6: Tweaks & Functionality</span></div>
+            <div class="w-full"><span class="">- Rewrote all mongoose on the server side.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.3.5: Tweaks & Functionality</span></div>
+            <div class="w-full"><span class="">- Implemented server side of adding and updating components.</span></div>
+            <div class="w-full"><span class="">- Fixed some live server security issues.</span></div>
+            <div class="w-full"><span class="">- Testing events transfer from front to backend server.</span></div>
+            <div class="w-full"><span class="">- Set session timeout at 3 hours and fixed some server warnings.</span></div>
+            <div class="w-full"><span class="">- Prepared backend for working with SheetJS.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.3.4: Tweaks & Functionality</span></div>
+            <div class="w-full"><span class="">- Created BaseComponent, BaseService, and Event classes, and moved respective things into those.</span></div>
+            <div class="w-full"><span class="">- Implemented server end of adding new components.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.3.3: Tweaks & Functionality</span></div>
+            <div class="w-full"><span class="">- Added a loading indicator that still needs to be put in the right place.</span></div>
+            <div class="w-full"><span class="">- Made AppService intercept add events. Eventually it'd be convenient for consistency to restructure the relationship between the AppComponent and the AppService.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.3.2: Tweaks & Functionality</span></div>
+            <div class="w-full"><span class="">- Made add field, remove table, and remove schema work.</span></div>
+            <div class="w-full"><span class="">- Still need to re-do adding things with generating objects with IDs.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.3.1: Tweaks & Functionality</span></div>
+            <div class="w-full"><span class="">- Made searches only execute on letter keypresses instead of any keypress; same with saving notes and commentss.</span></div>
+            <div class="w-full"><span class="">- Fixed a small bug in the searches that only applies for sample data.</span></div>
+            <div class="w-full"><span class="">- Made children collapse when a component's notes or comments are expanded, notes collapse when commentss are expanded, and vice versa.</span></div>
+            <div class="w-full"><span class="">- Added names of regions at the #endregion directives too, for ease of reading, as well as some more console logs and comments.</span></div>
+            <div class="w-full"><span class="">- Made notes collapse when comments is shown, and vice versa.</span></div>
+            <div class="w-full"><span class="">- Made the font for schemas, tables, and fields all the same size.</span></div>
+            <div class="w-full"><span class="">- Made remove field work and added a done form.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.3.0: Tweaks & Functionality</span></div>
+            <div class="w-full"><span class="">- Added a ModalService, moved the changelog into its own component, and started on forms.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.2.4: Tweaks & Functionality</span></div>
+            <div class="w-full"><span class="">- Made the numbers for search results and mapping counts work again under the new event system.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.2.3: Tweaks & Functionality</span></div>
+            <div class="w-full"><span class="">- Added more server functionality and started on user authorization.</span></div>
+            <div class="w-full"><span class="">- Added cases for updating fields, tables, schemas, and data (still need to implement).</span></div>
+            <div class="w-full"><span class="">- Re-styled schemas and data.</span></div>
+            <div class="w-full"><span class="">- Fixed the mapping bugs.</span></div>
+            <div class="w-full"><span class="">- Added a search for field notes and commentss.</span></div>
+            <div class="w-full"><span class="">- Added notes and commentss to tables, schemas, and data.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.2.2: Tweaks</span></div>
+            <div class="w-full"><span class="">- Re-styled tables</span></div>
+            <div class="w-full"><span class="">- Made the table done/issue checkboxes work again.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.2.1: Tweaks</span></div>
+            <div class="w-full"><span class="">- Re-styled fields and added tooltips to buttons.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.2.0: Tweaks & Functionality Implementation</span></div>
+            <div class="w-full"><span class="">- Revamped event system and moved data into services.</span></div>
+            <div class="w-full"><span class="">- Implemented notes.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.1.7: Tweaks & Functionality Implementation</span></div>
+            <div class="w-full"><span class="">- Wrote importExport controller for server/backend CSV loading.</span></div>
+            <div class="w-full"><span class="">- Gave each document & subdoc unique _id and updated frontend app to reflect this change.</span></div>
+            <div class="w-full"><span class="">- Implemented backend queries to receive Field Object from Web Socket and update the database.</span></div>
+            <div class="w-full"><span class="">- Added a few superficial fields to the dbData model (i.e. Num Tables, Num Fields).</span></div>
+            <div class="w-full"><span class="">- **NOTE** Duplication bug in map event.  In the 'destination' side, two identical objects are being put in the mapped array. Only happens on one side.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.1.6: Tweaks & Functionality Implementation</span></div>
+            <div class="w-full"><span class="">- Implemented saving fields via web sockets.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.1.5: Tweaks & Functionality Implementation</span></div>
+            <div class="w-full"><span class="">- Implemented web sockets into the backend.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.1.4: Tweaks & Functionality Implementation</span></div>
+            <div class="w-full"><span class="">- Revamped event system again; made mapping work.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.1.3: Tweaks & Functionality Implementation</span></div>
+            <div class="w-full"><span class="">- Added support npm server commands.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.1.2: Tweaks & Functionality Implementation</span></div>
+            <div class="w-full"><span class="">- Working on more styling.</span></div>
+            <div class="w-full"><span class="">- Added sample target data.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.1.1: Tweaks & Functionality Implementation</span></div>
+            <div class="w-full"><span class="">- Restyled some input fields.</span></div>
+            <div class="w-full"><span class="">- Added global field search; still working on efficiency and incorporating it with the local filters.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.1.0: Tweaks & Functionality Implementation</span></div>
+            <div class="w-full"><span class="">- Reformatted and simplified documentation everywhere.</span></div>
+            <div class="w-full"><span class="">- Applied some bootstrap styling.</span></div>
+            <div class="w-full"><span class="">- Installed drag/drop plugin.</span></div>
+            <div class="w-full"><span class="">- Implemented dragging and dropping source fields onto target fields and transferring that data.</span></div>
+            <div class="w-full"><span class="">- Added an expansion toggle and some empty buttons to fields.</span></div>
+            <div class="w-full"><span class="">- Added a "Clear all Filters" button.</span></div>
+            <div class="w-full"><span class="">- Revamped sample data generation.</span></div>
+            <div class="w-full"><span class="">- Made source/target schemas list containers scroll instead of the page by calculating their appropriate heights.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.0.3: Tweaks</span></div>
+            <div class="w-full"><span class="">- Created custom modal class, and updated changelog to use it (still working on making it autofocus when it comes up so pressing escape will work without having to click first).</span></div>
+            <div class="w-full"><span class="">- Imported global styles from Compass.</span></div>
+            <div class="w-full"><span class="">- Started doing Bootstrap styling.</span></div>
+            <div class="w-full"><span class="">- Added some buttons along the top header row.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.0.2: Tweaks</span></div>
+            <div class="w-full"><span class="">- Moved CDN declarations of Boostrap and JQuery to index.html.</span></div>
+            <div class="w-full"><span class="">- Added a changelog.</span></div>
+            <div class="w-full"><span class="">- Installed an Angular 2 modal plugin.</span></div>
+        </div>
+
+        <div class="changelogItem">
+            <div class="w-full"><span class="title">v0.0.1: Instantiation</span></div>
+            <div class="w-full"><span class="">- Finally found a framework that will work (Angular2).</span></div>
+            <div class="w-full"><span class="">- Hardcoded some sample data in.</span></div>
+            <div class="w-full"><span class="">- Solidified the relationships between data sets, schemas, tables, and fields.</span></div>
+            <div class="w-full"><span class="">- Hardcoded some sample data in.</span></div>
+            <div class="w-full"><span class="">- Added collapsing/expanding functionality.</span></div>
+            <div class="w-full"><span class="">- Added filtering functionality.</span></div>
+            <div class="w-full"><span class="">- Added sorting functionality to sort schemas and tables alphabetically on import. Fields are left in the order in which they're imported.</span></div>
+            <div class="w-full"><span class="">- Added collapsing/expanding functionality.</span></div>
+        </div>
+
+    </div>
+</app-modal>

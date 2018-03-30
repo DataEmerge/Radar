@@ -1,0 +1,73 @@
+﻿DataEmerge Radar App - Client
+Author: Andrew Gulick
+
+See the overview readme for:
+	- running directions
+	- imports semantics
+	- file structure explanation
+
+When changing ScriptEvent properties, the following must be updated:
+	- 
+	- implementation in this folder // all the definitions are provided from ../node_modules/Radar-shared/ (see overview readme)
+    - definitions in the shared folder
+	- definitions and implementation in ../server // see server readme
+    - any implementation in API
+	- the classes and implementation in the Echo Monitoring script
+
+How the client app works:
+	While Angular is component-based, it has aspects of MVC and MVVM. Beyond the component-based parts, this client app functions mostly as MVVM:
+		- model: the ScriptStatusService has the list of scriptStatus objects queried from the database
+		- viewModel: the JS in the ScriptStatusComponents controls the logic and state for the views
+		- view: the HTML and interpolation in the ScriptStatusComponent templates display the status, progress, and other scriptStatus properties
+
+	In the bigger picture, the Radar app as a whole (client and server) is MVC:
+		- model: the database
+		- controller: the server's ScriptStatusController and the client's ScriptStatusService together control what scriptStatus properties are
+			changed when events are received
+		- view: the client's ScriptStatusComponents comprise the GUI
+
+	All client-server communication happens in the AppService (see implementation there for more details).
+	NOTE: the AppService.isLocal property must be changed when switching between production and local development, or you'll get HTTPS errors.
+
+	On startup, several things need to happen in a certain order. First, the AppComponent and the services are initialized. For core app
+		functionality, the only pieces that matter are the AppComponent, the AppService, the ScriptStatusService, and the ScriptStatusComponents.
+	I haven't found the initialization timing (and hence we don't really want to rely on the order either) very reliable, which sometimes would
+		result in things asking for stuff before the senders had that stuff, etc. So I ended up forcing the different components to wait for each
+		other, sending ready notifications when they've completed their required startup operations.
+	The de facto initialization process is as follows:
+		1. The AppComponent and AppService go through their Angular construction/initialization processes, then the other services are created.
+		   The tricky part of this arrangement was the inherent circular dependency among the services that have references to each other's
+			instances.
+		2. Upon completion of the Angular initialization:
+			- the AppComponent tells the AppService that it's been initialized
+			- the AppService establishes the web socket connection with the Radar server
+			- once its received the ready notification from the app and connected to the server, the AppService tells the AppComponent that it's ready
+			- the AppComponent then tells the AppService to request the scriptStatuses from the server
+			- 
+
+
+
+
+About the tsconfig.json:
+	The paths listed there (and the base url) are so that relative paths can be used in import statements.
+	When the app gets compiled, the gulpfile transpiles the import paths to absolute paths.
+	The output directory only affects where you run the actual index.js from, but probably shouldn't be inside the src file.
+	Most of the settings are compiler options for syntax/semantics preferences, but make an educated and purposeful decision before changing them.
+	The target is the JS version the app gets compiled to. It preferably should be "esnext", and we'll deal with compatibility issues as they arise.
+
+About miscellanous files:
+	The .angular-cli.json file has the settings for the Angular CLI, which was used to initially generate the project, and is used to test the app
+		locally. You shouldn't ever have to mess with these settings. If you do, Google before you do it.
+	The tsconfig.app.json file has the app settings for the typescript compilation when you run the app locally. You shouldn't have to change these
+		settings ever, either, since it extends the primary tsconfig.json.
+	The polyfills.ts file has some imports required by the Angular CLI things.
+	The main.ts file is run for local testing.
+
+About specific node_modules:
+	Keep rxjs at version 5.4.3 until the issue between Angular 5 and rxjs v5.5.3 is resolved (otherwise the datetimepicker doesn't work), as well as
+		the issue with rxjs supporting es2015+.
+	The radial-progress-chart-mod is a modified version of someone else's (see the module for the name) module that we've modified slightly to make
+		minimum progress be correct and to always have the circle filled to behind the icons. We put it on Github and NPM so our changes would
+		persist across updates and installations.
+
+Consult the individual classes for further implementation details and explanations.

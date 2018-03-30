@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+        <link rel="stylesheet" href="styles.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    </head>
+    <body class="gray-xxxd font-white fill-height">
+
+        <div class="row mb-2 flex-none" id="page-header" style="box-shadow: rgba(51, 152, 75, 0.5) 0px 2px 5px 0px;">
+            <div class="row w-100 py-1 font-sm">
+                <div class="w-xl w-lg w-md mx-auto">
+                    <div class="row">
+                        <span class="invisible">Some invisible text</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row w-100 green" style="height: 5px"></div>
+        </div>
+
+        <div class="mx-auto pt-5" style="max-width: 400px;">
+            <img class="img-fluid" src="assets/images/radarlogo.png" />
+            <form class="form-dark pt-3" action="/login" method="post">
+
+                <div class="form-group">
+                    <label class="col-form-label">Username:</label>
+                    <input class="form-control" type="text" name="username" placeholder="Username" />
+                </div>
+
+                <div class="form-group">
+                    <label class="col-form-label">Password:</label>
+                    <input class="form-control" type="password" name="password" placeholder="Password" />
+                </div>
+
+                <div class="form-group row">
+                    <div class="relative">
+                        <a class="btn btn-primary DETooltip" href="/auth/google">
+                            <span class="fa fa-google-plus"></span> Google Log In
+                        </a>
+                        <span class="DETooltiptext DETooltip-top font-sm">Log in with your DataEmerge Google account</span>
+                    </div>
+                    <button class="btn btn-primary ml-auto" type="submit">Log In</button>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="align-items-end row font-sm" id="page-footer">
+            <div class="row w-100 px-3" id="footer-row">
+                <div class="my-1 mx-auto">
+                    <div class="row">
+
+                        <div class="col-auto br-1 b-white" id="copyright">
+                            <span class="">Copyright </span>
+                            <span class="fa fa-copyright"></span>
+                            <span class=""> DataEmerge 2017</span>
+                        </div>
+
+                        <div class="col-auto br-1 b-white" id="phone">
+                            <span class="fa fa-phone"></span>
+                            <span class=""> (614) 725-0404</span>
+                        </div>
+
+                        <div class="col-auto br-1 b-white" id="address">
+                            <span class="fa fa-map-marker"></span>
+                            <span class=""> 1550 Old Henderson Road | Suite 234 | Columbus, Ohio 43220 | United States of America</span>
+                        </div>
+
+                        <div class="col-auto" id="email">
+                            <span class="fa fa-question-circle-o"></span>
+                            <span class=""> Need help? Email </span>
+                            <a class="font-blue-b" href="mailto:devteam@dataemerge.com">devteam@dataemerge.com</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

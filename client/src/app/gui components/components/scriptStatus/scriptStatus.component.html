@@ -1,0 +1,176 @@
+﻿<div [ngClass]="{ 'gray-xxd': darkTheme, 'gray-xb': !darkTheme, 'isFlashing': isFlashing }"
+     [ngStyle]="{ 'display': matchesFilter ? '' : 'none' }"
+     class="b-radius-5px pt-2 pb-1 b-1 scriptStatus {{ status }} font-xs flash" id="scriptStatus-{{ _id }}">
+
+    <div *ngIf="isPopulated"
+         class="row pt-1 px-2">
+
+        <div class="row w-100" id="statusUpdated-{{ _id }}">
+
+            <div class="col-auto px-0 row align-items-center font-sm" id="statusIndicator-{{ _id }}">
+                <div [ngClass]="{
+                        'dot-green': status == 'Completed',
+                        'dot-blue': status == 'Running',
+                        'dot-red': status == 'Errored',
+                        'dot-purple': status == 'Unknown',
+                        'dot-orange': status == 'Stopped'
+                     }"
+                     class="dot"></div>
+                <div class="ml-1 font-gray">{{ status }}</div>
+            </div>
+
+            <div class="mx-auto"></div>
+
+            <div class="relative font-xs font-gray row align-items-center" id="lastUpdated-{{ _id }}">
+
+                <div class="DETooltip">
+                    <span class="fa fa-clock-o font-lg"></span>
+                    <span class="">{{ formatDuration(dateNow() - lastUpdated, false) }}</span>
+                </div>
+
+                <div class="DETooltiptext DETooltip-top">
+                    <span class="">updated {{ formatDuration(dateNow() - lastUpdated) }} ago</span><br />
+                    <span class="">{{ formatDate(lastUpdated) == '' ? 'Unknown' : formatDate(lastUpdated) }}</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row mb-1" id="projectInfo-{{ _id }}">
+
+            <span class="w-100 text-center font-lg font-green-b">{{ _project.facility ? _project.facility.name : 'Unknown Facility' }}</span>
+            <span *ngIf="_project.subfacility"
+                  class="w-100 text-center font-blue-b">({{ _project.subfacility.name }})</span>
+
+            <div class="w-100 text-center">
+                <span class="font-gray">#{{ _project.referenceNum + ' ' }}</span>
+                <span class="">{{ _project.name }}</span>
+            </div>
+
+            <div class="w-100 text-center font-gray">
+                <span class="">Extractor:</span>
+                <span class="">{{ ' ' + (dataExtractorName ? dataExtractorName : 'unknown') }}</span>
+            </div>
+
+        </div>
+
+        <div [hidden]="!isExpanded"
+             class="w-100 scriptStatusBody pt-1" id="scriptStatusBody-{{ _id }}">
+
+            <progressGraph [_id]="_id"
+                           [diameter]="200"
+                           [darkTheme]="darkTheme"
+                           [graphValues]="graphValues"></progressGraph>
+
+            <div [ngClass]="{ 'font-gray': darkTheme, 'font-gray-xd': !darkTheme }"
+                 class="row my-2" id="statusInfo-{{ _id }}">
+
+                <div class="w-100 mb-2" id="operationDescCurrentUnits-{{ _id }}">
+
+                    <div class="w-100 text-center">
+                        <span class="">Operation:{{ ' ' + operation }}</span>
+                    </div>
+
+                    <div *ngIf="description && description.length > 0"
+                         class="w-100 text-center">Description:{{ ' ' + description }}</div>
+
+                    <div class="w-100 text-center">
+                        <span class="w-100 text-center">Current{{ ' ' + (operation == 'Extract' ? 'Table' : (operation == 'Reports' ? 'Report' : 'Unit')) + (currentUnitNames.length > 1 ? 's' : '') }}:</span>
+                        <span *ngIf="currentUnitNames.length == 0"
+                              class="w-100 text-center">none</span>
+                        <span *ngFor="let currentUnitName of currentUnitNames; let y = index"
+                              class="w-100 text-center">{{ currentUnitName + (y < currentUnitNames.length - 1 ? ', ' : '') }}</span>
+                    </div>
+
+                </div>
+
+                <div class="w-100 mb-2" id="operationStartedRestartsStopped-{{ _id }}">
+                    <div [ngClass]="{ 'font-gray': darkTheme, 'font-black': !darkTheme }"
+                         class="w-100 text-center">{{ operation + ' started ' + formatDuration(dateNow() - startDate) + ' ago' }}</div>
+                    <div [ngClass]="{ 'font-gray': darkTheme, 'font-black': !darkTheme }"
+                         class="w-100 text-center">{{ restarts + ' restarts' }}</div>
+                    <div *ngIf="status == 'Errored' || status == 'Stopped'"
+                         [ngClass]="{ 'font-red': status == 'Errored', 'font-orange': status == 'Stopped' }"
+                         class="w-100 text-center">{{ status + ' since ' + formatDate(downTime) }}</div>
+                </div>
+
+                <div class="w-100 mb-2" id="unitsBytesProcessed-{{ _id }}">
+
+                    <div class="w-100 text-center" id="unitsProcessed-{{ _id }}">
+                        <span [ngStyle]="{ 'color': darkTheme ? UNITS_GRAPH_FG_COLOR : UNITS_GRAPH_BG_COLOR }"
+                              class="">{{ unitsProcessed != null ? unitsProcessed : 'Unknown' }}</span>
+                        <span class="">of</span>
+                        <span [ngStyle]="{ 'color': darkTheme ? UNITS_GRAPH_FG_COLOR : UNITS_GRAPH_BG_COLOR }"
+                              class="">{{ totalUnits != null ? totalUnits : 'Unknown' }}</span>
+                        <span class="">{{ operation == 'Extract' ? 'Tables' : (operation == 'Reports' ? 'Reports' : 'Units') }}</span>
+                        <span class="">{{ operation == 'Extract' ? 'Extracted' : (operation == 'Reports' ? 'Generated' : 'Processed') }} ({{ 100 * (1 - calcBytesLeftPercentage()) }})</span>
+                    </div>
+
+                    <div class="w-100 text-center" id="bytesProcessed-{{ _id }}">
+                        <span [ngStyle]="{ 'color': darkTheme ? BYTES_GRAPH_FG_COLOR : BYTES_GRAPH_BG_COLOR }"
+                              class="">{{ bytesProcessed != null ? formatBytes(bytesProcessed) : 'Unknown' }}</span>
+                        <span [ngClass]="{ 'font-gray-xb': darkTheme, 'font-gray-xd': !darkTheme }"
+                              class="">{{ bytesProcessed != null ? formatBytes(bytesProcessed, true) : 'Data Units' }}</span>
+                        <span class="">of</span>
+                        <span [ngStyle]="{ 'color': darkTheme ? BYTES_GRAPH_FG_COLOR : BYTES_GRAPH_BG_COLOR }"
+                              class="">{{ totalBytes != null ? formatBytes(totalBytes) : 'Unknown' }}</span>
+                        <span [ngClass]="{ 'font-gray-xb': darkTheme, 'font-gray-xd': !darkTheme }"
+                              class="">{{ bytesProcessed != null ? formatBytes(totalBytes, true) : 'Data Units' }}</span>
+                        <span class="">{{ operation == 'Extract' ? 'Extracted' : (operation == 'Reports' ? 'Generated' : 'Processed') }} ({{ 100 * (1 - calcUnitsLeftPercentage()) }})</span>
+                    </div>
+
+                </div>
+
+                <div class="w-100 mb-2 relative" id="completionTime-{{ _id }}">
+                    <div class="DETooltip">
+                        <div class="w-100 text-center">Estimated completion date:</div>
+                        <div *ngIf="isRunning"
+                             [ngStyle]="{ 'color': estimatedTimeLeft >= 0 ? (darkTheme ? TIME_GRAPH_FG_COLOR : TIME_GRAPH_BG_COLOR) : 'red' }"
+                             class="w-100 text-center">{{ formatDate(estimatedCompletionDate) == '' ? 'Unknown' : formatDate(estimatedCompletionDate) }}</div>
+                        <div *ngIf="isRunning"
+                             [ngClass]="{ 'DETooltip': estimatedTimeLeft < 0 }"
+                             class="w-100 text-center relative">
+                            (<span [ngStyle]="{ 'color': estimatedTimeLeft >= 0 ? (darkTheme ? TIME_GRAPH_FG_COLOR : TIME_GRAPH_BG_COLOR) : 'red' }"
+                                  class="">{{ (estimatedCompletionDate == null || estimatedTimeLeft < 0 ? 'unknown ' : formatDuration(estimatedCompletionDate - dateNow())) + ' ' }}</span>{{ estimatedCompletionDate == null || estimatedTimeLeft < 0 ? 'time ' : '' }}remaining)
+                        </div>
+                        <div *ngIf="!isRunning"
+                             class="w-100 text-center">N/A (not running)</div>
+                    </div>
+                    <span *ngIf="estimatedTimeLeft < 0" 
+                            class="DETooltiptext DETooltip-top font-xs">Unknown until further<br />updates are received</span>
+                </div>
+
+                <div class="row w-100" id="errorsReported-{{ _id }}">
+                    <span (click)="showErrors()"
+                          [ngClass]="{ 'font-red': errorList.length > 0, 'font-green': errorList.length == 0 }"
+                          class="underline-hover pointer mx-auto">{{ errorList.length + ' ' }}error{{ errorList.length != 1 ? 's ' : ' ' }}reported</span>
+                </div>
+
+                <div class="row w-100" id="viewEventLog-{{ _id }}">
+                    <span (click)="showEventLog()"
+                          class="ml-auto underline-hover pointer font-gray">View event log</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row w-100">
+            <div (click)="expand()"
+                 class="relative mx-auto col-2 pointer text-center">
+                <span [ngClass]="{ 'fa-chevron-up': isExpanded, 'fa-chevron-down': !isExpanded }"
+                      class="fa pointer DETooltip"></span>
+                <span class="DETooltiptext DETooltip-top DETooltip-sm font-sm">{{ (isExpanded ? 'Collapse' : 'Expand') + ' status' }}</span>
+            </div>
+        </div>
+
+    </div>
+
+    <loadingIndicator *ngIf="!isPopulated"
+                      [numDots]="3"
+                      class="mx-auto mt-5"></loadingIndicator>
+
+    <div [ngClass]="{ 'isFlashing': isFlashing }"
+         class="flash"></div>
+
+</div>

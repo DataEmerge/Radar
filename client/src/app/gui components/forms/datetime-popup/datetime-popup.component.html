@@ -1,0 +1,58 @@
+<div [ngClass]="{ 'form-dark': darkTheme }"
+     class="input-group">
+    <input (click)="expand(true)"
+           class="form-control form-control-sm" [value]="formatDate(localValue)" readonly />
+    <button class="input-group-btn btn btn-primary btn-sm pointer" (click)="expand()">
+        <span class="fa fa-calendar"></span>
+    </button>
+</div>
+
+<div [ngClass]="{ 'show': isExpanded }"
+     (onContainerClicked)="onContainerClicked($event)"
+     class="dropdown">
+    <ul [ngClass]="{ 'show': isExpanded }"
+        class="dropdown-menu font-md" role="menu">
+
+        <li class="mb-2 mx-2">
+
+            <datepicker *ngIf="showDate"
+                        [(ngModel)]="localValue"
+                        [showWeeks]="showWeeks"
+                        [datepickerMode]="datepickerMode"
+                        [dateDisabled]="dateDisabled"></datepicker>
+
+            <timepicker *ngIf="showTime"
+                        [(ngModel)]="localValue"></timepicker>
+
+        </li>
+
+        <li class="mx-2 mb-2">
+
+            <span class="btn-group pull-left">
+
+                <button (click)="onNowSelected()"
+                        *ngIf="nowButton.isVisible"
+                        [ngClass]="nowButton.CSSClasses">
+                    {{ nowButton.label }}
+                </button>
+
+                <button (click)="onClear()"
+                        *ngIf="clearButton.isVisible"
+                        [ngClass]="clearButton.CSSClasses">
+                    {{ clearButton.label }}
+                </button>
+
+            </span>
+
+            <span class="btn-group pull-right">
+                <button (click)="close()"
+                        *ngIf="closeButton.isVisible"
+                        [ngClass]="closeButton.CSSClasses">
+                    {{ closeButton.label }}
+                </button>
+            </span>
+
+        </li>
+
+    </ul>
+</div>

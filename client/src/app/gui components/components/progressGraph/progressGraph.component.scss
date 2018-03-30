@@ -1,0 +1,58 @@
+﻿.graphs {
+    border-radius: 50%;
+    position: relative;
+    z-index: 1;
+}
+
+.graph {
+    border-radius: 50%;
+    position: absolute;
+}
+
+.graph-background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: 50%;
+    opacity: 0.3;
+}
+
+.graph-overlay {
+    position: absolute;
+    border-radius: 50%;
+}
+
+.graph-foreground {
+    position: absolute;
+    border-radius: 50%;
+}
+
+.wedge-container {
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    bottom: 0;
+}
+
+.wedge {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+
+.marker {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-radius: 50%;
+}
+
+.marker.start {
+
+}
+
+.marker.end {
+
+}
